@@ -52,7 +52,7 @@ def chatWithDify(appName, conversionName,cnt):
             json_data = response.json()
             for item in json_data['data']:
                 printByRole('user','Role:user')
-                printByRole('user', f'Content:{item['query']}')
+                printByRole('user', f"Content:{item['query']}")
                 printByRole('system', "Role:system")
                 printByRole('system',f"Content:{item['answer']}")
     query = input('>')
