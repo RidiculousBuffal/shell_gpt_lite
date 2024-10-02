@@ -1,23 +1,28 @@
-# shell_gpt Lite 
-## 项目介绍
-> 这是一个简易版的shellgpt,参考 [shell_gpt](https://github.com/TheR1D/shell_gpt)实现,目前实现了如下几个功能
-> - --chat 普通聊天,没有记忆
-> - --repl 记忆聊天,会把之前的对话储存在json中
-> - --shell 可以生成针对不同平台的shell脚本,并提示执行
-> - dify --workflow --conversion 和配置文件中的dify进行交互
-## 配置文件说明
+
+# 🌟 shell_gpt Lite 
+
+## 📖 项目介绍
+> 这是一个简易版的 shell_gpt，参考 [shell_gpt](https://github.com/TheR1D/shell_gpt) 实现。当前实现了如下几个功能：
+> - 💬 `--chat` 普通聊天，没有记忆
+> - 📚 `--repl` 记忆聊天，会把之前的对话储存在 JSON 中
+> - 🐚 `--shell` 可以生成针对不同平台的 shell 脚本，并提示执行
+> - 🔄 `dify --workflow --conversion` 和配置文件中的 dify 进行交互
+
+## ⚙️ 配置文件说明
+首先复制环境变量示例文件：
 ```bash
 cp .env.example .env
 ```
+然后在 `.env` 文件中填入以下配置：
 ```bash
-OPENAI_API_KEY:"OPENAI密钥"
-OPENAI_BASE_URL:"OPENAI代理地址"
-DEFAULT_PROMPT:"默认Prompt"
-DEFAULT_MODEL:"默认模型"
-DEFAULT_STORE_PATH:"存储repl的路径"
-DIFY_CONFIG_PATH:"dify配置文件参考"
+OPENAI_API_KEY: "OPENAI密钥"       # 🗝️ 你的 OpenAI 密钥
+OPENAI_BASE_URL: "OPENAI代理地址"  # 🌐 OpenAI 代理地址
+DEFAULT_PROMPT: "默认Prompt"         # 💡 默认 Prompt
+DEFAULT_MODEL: "默认模型"            # 🎨 默认模型
+DEFAULT_STORE_PATH: "存储repl的路径" # 📁 存储 repl 的路径
+DIFY_CONFIG_PATH: "dify配置文件参考"  # ⚙️ dify 配置文件路径
 ```
-对于`DEFAULT_STORE_PATH`你只需要填写一个本地路径即可,每一次新的repl会生成一个json如下:
+对于 `DEFAULT_STORE_PATH`，你只需要填写一个本地路径即可，每一次新的 repl 会生成一个 JSON，如下所示：
 ```json
 {
     "message": [
@@ -52,14 +57,14 @@ DIFY_CONFIG_PATH:"dify配置文件参考"
     ]
 }
 ```
-对于`DIFY_CONFIG_PATH`你需要填写一个dify的配置文件路径如:`G:\\dify_config\\config.json`,这个json的格式如下:
+对于 `DIFY_CONFIG_PATH`，你需要填写一个 dify 的配置文件路径，如 `G:\\dify_config\\config.json`。这个 JSON 的格式如下：
 ```json
 {
     "API_BASE_URL": "https://xxx/v1",
     "USER": "xxx",
     "APPS": {
         "APP_NAME": {
-            "API_KEY": "应用的api_key",
+            "API_KEY": "应用的 api_key",
             "Conversions": {
                 "聊天标题,": "conversion_id"
             }
@@ -67,15 +72,53 @@ DIFY_CONFIG_PATH:"dify配置文件参考"
     }
 }
 ```
-其中`Conversions`一开始可以为空,当使用
+其中 `Conversions` 一开始可以为空，当使用以下命令时：
 ```bash
 python dhugpt.py dify --workflow APP_NAME --conversion ConversionName
 ```
-时候,如果ConversionName为空,那么最后会在该app的conversions的对象中自动增加一条记录
-# 使用效果
-![Snipaste_2024-09-29_23-17-48.png](img%2FSnipaste_2024-09-29_23-17-48.png)
-![Snipaste_2024-09-30_00-06-23.png](img%2FSnipaste_2024-09-30_00-06-23.png)
-![Snipaste_2024-10-02_13-20-18.png](img%2FSnipaste_2024-10-02_13-20-18.png)
-![Snipaste_2024-10-02_13-21-11.png](img%2FSnipaste_2024-10-02_13-21-11.png)
-# 使用说明和开发
-TODO 待打包后补充
+如果 `ConversionName` 为空，系统会在该 app 的 conversions 对象中自动增加一条记录。
+
+## 🖼️ 使用效果
+### 记忆对话
+![记忆对话](img/Snipaste_2024-09-29_23-17-48.png)
+
+### 执行命令
+![执行命令](img/Snipaste_2024-09-30_00-06-23.png)
+
+### dify 获得之前的历史记录
+![历史记录](img/Snipaste_2024-10-02_13-20-18.png)
+
+### dify 获得引用
+![引用](img/Snipaste_2024-10-02_13-21-11.png)
+
+## 📜 使用说明和开发
+### 指令参考
+
+- 短对话: `dhugpt --chat 'chat message'`
+![短对话](img/img.png)
+
+- 长对话: `dhugpt --repl 'replname'`
+![长对话](img/img_1.png)
+
+- 执行 shell 命令: `dhugpt --shell 'question'`
+![执行命令](img/img_2.png)
+
+- 使用 dify 进行对话: `dhugpt dify --workflow {appname} --conversion {conversionname}`
+![dify 对话](img/Snipaste_2024-10-02_14-52-42.png)
+
+### 🐧 在 Linux 上使用
+运行 `export_env.sh`，输入必要的环境变量。有时候需要设置如下环境变量：
+```bash
+export all_proxy=''
+export ALL_PROXY=''
+```
+
+### 📦 打包:
+```bash
+pip install -r 'requirements.txt'
+pip install pyinstaller
+pyinstaller --onefile dhugpt.py
+```
+
+
+
