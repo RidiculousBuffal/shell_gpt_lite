@@ -107,7 +107,12 @@ python dhugpt.py dify --workflow APP_NAME --conversion ConversionName
 ![dify 对话](img/Snipaste_2024-10-02_14-52-42.png)
 
 ### 🐧 在 Linux 上使用
-运行 `export_env.sh`，输入必要的环境变量。有时候需要设置如下环境变量：
+```bash
+source export_env.sh
+```
+运行 `export_env.sh`\
+😨**记住是`source export_env.sh` 不是 `bash export_env.sh`**，这是因为`bash`导出的变量只对当前文件有效,而source是全局的\
+输入必要的环境变量。有时候需要设置如下环境变量：
 ```bash
 export all_proxy=''
 export ALL_PROXY=''
