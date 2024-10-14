@@ -4,6 +4,8 @@ import json
 import requests
 
 from config.DifyConfig import DifyConfig
+from utils.dhuCommandXMLparser import parseXML
+from utils.excuteCommand import generateShellBash
 from utils.printCenter import printByRole
 
 
@@ -13,7 +15,7 @@ def _printCitation(citlist: []):
         printByRole('citation', f'''索引文档:{obj['dataset_name']}''')
         printByRole('citation', f'''索引内容:{obj['content']}''')
         printByRole('citation', f'''索引评分:{obj['score']}''')
-        printByRole('citation',f'''-------------------------------''')
+        printByRole('citation', f'''-------------------------------''')
 
 
 def _has_retriever_resources(obj):
@@ -27,9 +29,10 @@ def _has_retriever_resources(obj):
     return False
 
 
-def chatWithDify(appName, conversionName,cnt):
+def show_history(appName, conversionName, cnt):
     baseurl, user = DifyConfig.get_api_base_url_and_user()
     if not DifyConfig.getConversionID(appName, conversionName):
+
         # 新对话,展示开始引导
         printByRole('info', f'''进入到新对话{conversionName}''')
         url = f'''{baseurl}/parameters'''
@@ -42,22 +45,23 @@ def chatWithDify(appName, conversionName,cnt):
         printByRole('system', 'Role:system')
         printByRole('system', json_data['opening_statement'])
     else:
-        if cnt == 0 :
+        if cnt == 0:
             printByRole('info', f'''欢迎回到对话{conversionName}''')
             url = f'{baseurl}/messages?conversation_id={DifyConfig.getConversionID(appName, conversionName)}&user={user}'
             headers = {
                 'Authorization': f'Bearer {DifyConfig.get_API_KEY(appName)}'
             }
-            response = requests.request("GET", url, headers=headers,data={})
+            response = requests.request("GET", url, headers=headers, data={})
             json_data = response.json()
             for item in json_data['data']:
-                printByRole('user','Role:user')
+                printByRole('user', 'Role:user')
                 printByRole('user', f"Content:{item['query']}")
                 printByRole('system', "Role:system")
-                printByRole('system',f"Content:{item['answer']}")
-    query = input('>')
-    printByRole('user', 'Role:user')
-    printByRole('user', query)
+                printByRole('system', f"Content:{item['answer']}")
+
+
+def _dify_stream(appName, conversionName, query):
+    baseurl, user = DifyConfig.get_api_base_url_and_user()
     conn = http.client.HTTPSConnection(baseurl.replace('https://', '').replace('/v1', ''))
     url, payload, headers = DifyConfig.return_chat_request_components('/chat-messages', appName, conversionName, query)
     conn.request("POST", '/v1/chat-messages', json.dumps(payload), headers)
@@ -78,9 +82,42 @@ def chatWithDify(appName, conversionName,cnt):
                     if json_data['event'] == "message":
                         printByRole('assistant', json_data['answer'], end='')
                     elif json_data['event'] == "message_end":
-                        DifyConfig.update_conversion_id(appName,conversionName, json_data['conversation_id'])
+                        DifyConfig.update_conversion_id(appName, conversionName, json_data['conversation_id'])
                         if _has_retriever_resources(json_data):
                             _printCitation(json_data['metadata']['retriever_resources'])
                 except json.JSONDecodeError:
                     pass
         conn.close()
+
+
+def _dify_block(appName, conversionName, query):
+    baseurl, user = DifyConfig.get_api_base_url_and_user()
+    conn = http.client.HTTPSConnection(baseurl.replace('https://', '').replace('/v1', ''))
+    url, payload, headers = DifyConfig.return_chat_request_components('/chat-messages', appName, conversionName, query,
+                                                                      response_mode="blocking")
+    conn.request("POST", '/v1/chat-messages', json.dumps(payload), headers)
+    res = conn.getresponse()
+    data = res.read()
+    json_data = json.loads(data.decode("utf-8"))
+    DifyConfig.update_conversion_id(appName, conversionName, json_data['conversation_id'])
+    _printCitation(json_data['metadata']['retriever_resources'])
+    return json_data['answer']
+
+
+def chatWithDify(appName, conversionName, cnt, stream=True, tool=None):
+    show_history(appName, conversionName, cnt)
+    query = input('>')
+    printByRole('user', 'Role:user')
+    printByRole('user', query)
+    if stream:
+        _dify_stream(appName, conversionName, query)
+    else:
+        res = _dify_block(appName, conversionName, query)
+        if tool:
+            match tool:
+                case 'bash':
+                    generateShellBash(parseXML(res))
+                    return
+        else:
+            printByRole("assistant",res)
+            return

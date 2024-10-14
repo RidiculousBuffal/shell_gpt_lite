@@ -29,12 +29,11 @@ def main():
 
     # 创建子解析器
     subparsers = parser.add_subparsers(dest="command")
-
     # 创建 --dify 子命令
     dify_parser = subparsers.add_parser("dify", help="Dify mode options")
     dify_parser.add_argument("--workflow", help="choose an workflow")
     dify_parser.add_argument("--conversion", help="make a conversion with dify_workflow")
-
+    dify_parser.add_argument("--tool", help="using a tool after dify answer")
     args = parser.parse_args()
     if args.command == "dify":
         # 指定工作流没有指定对话
@@ -43,7 +42,10 @@ def main():
         else:
             cnt = 0
             while True:
-                chatWithDify(args.workflow, args.conversion, cnt)
+                if not args.tool:
+                    chatWithDify(args.workflow, args.conversion, cnt, stream=True, tool=None)
+                else:
+                    chatWithDify(args.workflow, args.conversion, cnt, stream=False, tool=args.tool)
                 cnt = cnt + 1
 
 
