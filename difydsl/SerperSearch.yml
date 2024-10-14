@@ -1,0 +1,499 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: Serper测试
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.2
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: tool
+      id: 1727146750220-source-1727146756271-target
+      selected: false
+      source: '1727146750220'
+      sourceHandle: source
+      target: '1727146756271'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: code
+      id: 1727146756271-source-1727147187942-target
+      selected: false
+      source: '1727146756271'
+      sourceHandle: source
+      target: '1727147187942'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: iteration
+      id: 1727147187942-source-1727147170318-target
+      selected: false
+      source: '1727147187942'
+      sourceHandle: source
+      target: '1727147170318'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: iteration
+      id: 1727147187942-source-1727147246309-target
+      selected: false
+      source: '1727147187942'
+      sourceHandle: source
+      target: '1727147246309'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '1727147170318'
+        sourceType: iteration-start
+        targetType: code
+      id: 1727147170318start-source-1727147343515-target
+      selected: false
+      source: 1727147170318start
+      sourceHandle: source
+      target: '1727147343515'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: iteration
+        targetType: code
+      id: 1727147170318-source-1727147428651-target
+      selected: false
+      source: '1727147170318'
+      sourceHandle: source
+      target: '1727147428651'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      id: 1727147428651-source-1727147272417-target
+      selected: false
+      source: '1727147428651'
+      sourceHandle: source
+      target: '1727147272417'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        iteration_id: '1727147246309'
+        sourceType: iteration-start
+        targetType: code
+      id: 1727147246309start-source-1727147515820-target
+      selected: false
+      source: 1727147246309start
+      sourceHandle: source
+      target: '1727147515820'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        sourceType: iteration
+        targetType: code
+      id: 1727147246309-source-1727147602641-target
+      source: '1727147246309'
+      sourceHandle: source
+      target: '1727147602641'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      id: 1727147602641-source-1727147272417-target
+      source: '1727147602641'
+      sourceHandle: source
+      target: '1727147272417'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: queryString
+          max_length: 255
+          options: []
+          required: true
+          type: text-input
+          variable: queryString
+      height: 89
+      id: '1727146750220'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        provider_id: serper
+        provider_name: serper
+        provider_type: builtin
+        selected: false
+        title: Serper
+        tool_configurations: {}
+        tool_label: Serper
+        tool_name: serper
+        tool_parameters:
+          query:
+            type: mixed
+            value: '{{#1727146750220.queryString#}}'
+        type: tool
+      height: 53
+      id: '1727146756271'
+      position:
+        x: 384
+        y: 282
+      positionAbsolute:
+        x: 384
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        iterator_selector:
+        - '1727147187942'
+        - result
+        output_selector:
+        - '1727147343515'
+        - result
+        output_type: array[string]
+        selected: false
+        start_node_id: 1727147170318start
+        title: 提取链接
+        type: iteration
+        width: 388
+      height: 147
+      id: '1727147170318'
+      position:
+        x: 1159.366950798872
+        y: 152.17566280209445
+      positionAbsolute:
+        x: 1159.366950798872
+        y: 152.17566280209445
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 388
+      zIndex: 1
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: 1727147170318start
+      parentId: '1727147170318'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 1183.366950798872
+        y: 220.17566280209445
+      selectable: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        code: "\ndef main(arg1: list) -> list:\n    return {\n        \"result\":\
+          \ arg1[0]['organic'],\n    }\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: array[object]
+        selected: false
+        title: 提取数组
+        type: code
+        variables:
+        - value_selector:
+          - '1727146756271'
+          - json
+          variable: arg1
+      height: 53
+      id: '1727147187942'
+      position:
+        x: 776
+        y: 288
+      positionAbsolute:
+        x: 776
+        y: 288
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        iterator_selector:
+        - '1727147187942'
+        - result
+        output_selector:
+        - '1727147515820'
+        - result
+        output_type: array[string]
+        selected: false
+        start_node_id: 1727147246309start
+        title: 提取Snip
+        type: iteration
+        width: 388
+      height: 147
+      id: '1727147246309'
+      position:
+        x: 1180.0956439983888
+        y: 454.2563447193877
+      positionAbsolute:
+        x: 1180.0956439983888
+        y: 454.2563447193877
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 388
+      zIndex: 1
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: 1727147246309start
+      parentId: '1727147246309'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 1204.0956439983888
+        y: 522.2563447193877
+      selectable: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1727147428651'
+          - result
+          variable: links
+        - value_selector:
+          - '1727147602641'
+          - result
+          variable: snippets
+        selected: false
+        title: 结束
+        type: end
+      height: 115
+      id: '1727147272417'
+      position:
+        x: 2221.613541835392
+        y: 250.29147727980654
+      positionAbsolute:
+        x: 2221.613541835392
+        y: 250.29147727980654
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\n\ndef main(arg1:dict) -> dict:\n    return {\n        \"result\"\
+          : f'''\\n - [{arg1['title']}]({arg1['link']}) \\n'''\n    }\n"
+        code_language: python3
+        desc: ''
+        isInIteration: true
+        iteration_id: '1727147170318'
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 代码执行 2
+        type: code
+        variables:
+        - value_selector:
+          - '1727147170318'
+          - item
+          variable: arg1
+      height: 53
+      id: '1727147343515'
+      parentId: '1727147170318'
+      position:
+        x: 128
+        y: 68
+      positionAbsolute:
+        x: 1287.366950798872
+        y: 220.17566280209445
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        code: "\ndef main(arg1: list) -> dict:\n    return {\n        \"result\":\
+          \ ''.join(str(item) for item in arg1)+'\\n\\n --- \\n',\n    }\n\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 合并成字符串
+        type: code
+        variables:
+        - value_selector:
+          - '1727147170318'
+          - output
+          variable: arg1
+      height: 53
+      id: '1727147428651'
+      position:
+        x: 1631.2869319951665
+        y: 203.30643936090212
+      positionAbsolute:
+        x: 1631.2869319951665
+        y: 203.30643936090212
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(arg1: dict) -> dict:\n    return {\n        \"result\":\
+          \ arg1['snippet'],\n    }\n"
+        code_language: python3
+        desc: ''
+        isInIteration: true
+        iteration_id: '1727147246309'
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 代码执行 4
+        type: code
+        variables:
+        - value_selector:
+          - '1727147246309'
+          - item
+          variable: arg1
+      height: 53
+      id: '1727147515820'
+      parentId: '1727147246309'
+      position:
+        x: 128
+        y: 68
+      positionAbsolute:
+        x: 1308.0956439983888
+        y: 522.2563447193877
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+      zIndex: 1002
+    - data:
+        code: "\ndef main(arg1: list) -> dict:\n    return {\n        \"result\":\
+          \ ''.join(str(item) for item in arg1)+'\\n\\n --- \\n',\n    }\n\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 合并成字符串
+        type: code
+        variables:
+        - value_selector:
+          - '1727147246309'
+          - output
+          variable: arg1
+      height: 53
+      id: '1727147602641'
+      position:
+        x: 1638.3214014419978
+        y: 396.7742425563909
+      positionAbsolute:
+        x: 1638.3214014419978
+        y: 396.7742425563909
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -11.792880378267455
+      y: 202.04353510695213
+      zoom: 0.4675274202524809

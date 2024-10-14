@@ -13,7 +13,8 @@
 - 24/10/14 增加基于`chain of thought`的bash 代码生成功能,使用`-b` 或者 `--bash` 访问,使用`xml`
   语法解析每个步骤,但是就无法流失输出了,丧失交互性 \
   Prompt内容在[OpenAIClient.py](models%2FOpenAIClient.py)中
-
+- 24/10/24 支持dify在回答末尾调用工具,现在是bash tools ,当然要求dify回复格式和[OpenAIClient.py](models%2FOpenAIClient.py)中的一样\
+- dify的dsl文件分享在[difydsl](difydsl)中,供大家参考,同时还有一个sepersearch搜索的工作流,返回索引网站的链接和内容,便于在其他应用中展示
 ## ⚙️ 配置文件说明
 首先复制环境变量示例文件：
 ```bash

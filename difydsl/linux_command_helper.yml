@@ -1,0 +1,372 @@
+app:
+  description: linux_command_helper
+  icon: grin
+  icon_background: '#D3F8DF'
+  mode: advanced-chat
+  name: linux_command_helper
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.2
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: tool
+      id: llm-source-1728722842781-target
+      source: llm
+      sourceHandle: source
+      target: '1728722842781'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: template-transform
+      id: 1728722842781-source-1728722884027-target
+      source: '1728722842781'
+      sourceHandle: source
+      target: '1728722884027'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: knowledge-retrieval
+      id: 1728722543899-source-1728722903616-target
+      source: '1728722543899'
+      sourceHandle: source
+      target: '1728722903616'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: llm
+      id: 1728722543899-source-llm-target
+      source: '1728722543899'
+      sourceHandle: source
+      target: llm
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: 1728722903616-source-1728722943437-target
+      source: '1728722903616'
+      sourceHandle: source
+      target: '1728722943437'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: llm
+      id: 1728722884027-source-1728722943437-target
+      source: '1728722884027'
+      sourceHandle: source
+      target: '1728722943437'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: answer
+      id: 1728722943437-source-1728724079958-target
+      source: '1728722943437'
+      sourceHandle: source
+      target: '1728724079958'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables: []
+      height: 53
+      id: '1728722543899'
+      position:
+        x: 30
+        y: 253
+      positionAbsolute:
+        x: 30
+        y: 253
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - sys
+          - query
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: 7430f2ef-a349-4d07-8e7f-527d710e6cf7
+          role: system
+          text: "# Role\n你是一个Linux命令**网络搜索机器人**,你的任务是将用户的问题转换为**搜索关键字**在网络中搜索\n# Attention\n\
+            - **不要**给出命令,仅需给出要在网上搜索的内容\n- 搜索关键词长度应该不超过50个字符,以确保能在互联网上搜索到信息\n     \
+            \                       "
+        selected: false
+        title: Search On the Internet
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 97
+      id: llm
+      position:
+        x: 334
+        y: 365
+      positionAbsolute:
+        x: 334
+        y: 365
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        provider_id: 929443de-62b1-4bf8-a63f-694f56e08ccc
+        provider_name: SerperProAPI
+        provider_type: workflow
+        selected: false
+        title: SerperProAPI
+        tool_configurations: {}
+        tool_label: SerperProAPI
+        tool_name: SerperPro
+        tool_parameters:
+          queryString:
+            type: mixed
+            value: '{{#llm.text#}}'
+        type: tool
+      height: 53
+      id: '1728722842781'
+      position:
+        x: 638
+        y: 365
+      positionAbsolute:
+        x: 638
+        y: 365
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: '{{ arg1[0].snippets }}'
+        title: 提取搜索到的内容
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1728722842781'
+          - json
+          variable: arg1
+      height: 53
+      id: '1728722884027'
+      position:
+        x: 942
+        y: 384
+      positionAbsolute:
+        x: 942
+        y: 384
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        dataset_ids:
+        - f19e1c5f-4bf3-46ff-831a-2e2fcd4fb5c6
+        desc: ''
+        multiple_retrieval_config:
+          reranking_enable: true
+          reranking_mode: weighted_score
+          reranking_model:
+            model: ''
+            provider: ''
+          score_threshold: null
+          top_k: 10
+          weights:
+            keyword_setting:
+              keyword_weight: 0
+            vector_setting:
+              embedding_model_name: text-embedding-3-small
+              embedding_provider_name: openai
+              vector_weight: 1
+        query_variable_selector:
+        - '1728722543899'
+        - sys.query
+        retrieval_mode: multiple
+        selected: false
+        title: 知识检索
+        type: knowledge-retrieval
+      height: 91
+      id: '1728722903616'
+      position:
+        x: 942
+        y: 253
+      positionAbsolute:
+        x: 942
+        y: 253
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - '1728722903616'
+          - result
+        desc: ''
+        model:
+          completion_params:
+            frequency_penalty: 0.5
+            presence_penalty: 0.5
+            temperature: 0.2
+            top_p: 0.75
+          mode: chat
+          name: gpt-4o-mini
+          provider: openai
+        prompt_template:
+        - id: 376a29db-45e2-4748-b9bb-9ce732d78837
+          role: system
+          text: "# Role\nYou are a Linux command generation robot, specially designed\
+            \ to create **accurate**, **concise**, and **executable** Linux terminal\
+            \ commands for users. To ensure that you achieve expertise in this area,\
+            \ please follow the output specifications below.\n\n# Output Order and\
+            \ Format\nPlease strictly adhere to the following three-step principles\
+            \ to ensure that users receive satisfactory results.\n\n## Step 1: Check\
+            \ for Dependency Packages\nFirst, consider whether the user’s task requires\
+            \ any additional Linux packages. Enclose your thought process in **XML**\
+            \ tags `<DHUthink></DHUthink>`, and then output the commands to install\
+            \ the necessary dependencies, enclosed in `<DHUPackage></DHUPackage>`\
+            \ tags, for example:\n\n```xml\n<DHUthink>\n     Determine if the user's\
+            \ task requires additional packages\n</DHUthink>\n<DHUPackage>\n    sudo\
+            \ apt install tree\n    sudo apt install apache2\n    <!-- Other packages\
+            \ that need to be installed -->\n</DHUPackage>\n```\n\n**If no additional\
+            \ packages are needed, also output the corresponding XML tags, leaving\
+            \ them empty:**\n\n```xml\n<DHUthink>\n    <!-- Determine if the user's\
+            \ task requires additional packages -->\n</DHUthink>\n<DHUPackage />\n\
+            ```\n\n## Step 2: Obtain Necessary Environment Variables\nNext, consider\
+            \ whether the current user's environment variables or current folder information\
+            \ are needed. If you were on the user's computer, what Linux commands\
+            \ would you use to gather the necessary information? Similarly, wrap your\
+            \ thought process with `<DHUthink></DHUthink>` tags and output your commands\
+            \ enclosed in `<DHUenv></DHUenv>` tags, with all commands starting with\
+            \ `export`. For example:\n\n```xml\n<DHUthink>\n  Determine if user environment\
+            \ variables or folder information are needed \n</DHUthink>\n<DHUenv>\n\
+            \    export current_dir=$(pwd)\n    export kernel_info=$(uname -a)\n \
+            \   <!-- Other environment variables -->\n</DHUenv>\n```\n\n## Step 3:\
+            \ Output Commands\nAfter completing the preparations in the previous two\
+            \ steps, you can now output your commands. Regardless of how many lines\
+            \ the commands take, always wrap them in `<DHUcommand></DHUcommand>` tags.\
+            \ Don't forget use <DHUthink/> for deep thinking how to write the final\
+            \ code \n\n**The command you give must be an executable, logical bash\
+            \ script with some output statements, which you can use with the environment\
+            \ variable you exported in the previous step.**\n\nFor example:\n\n```xml\n\
+            <DHUthink>\n to see how much files are there in this folder , i should\
+            \ use `ls -la` command\n to copy file to this folder i should use `cp`\
+            \ command\n<DHUthink/>\n<DHUcommand>\n    # Here are the Linux commands\
+            \ the user needs to execute\n    ls -la\n    cp file.txt /path/to/destination\n\
+            </DHUcommand>\n```\n# Important\n**Never use comment like `<!-- -->` in\
+            \ <DHUthink>Node !**\n# Reference Materials\nYour robot partner has gathered\
+            \ the following materials for you:\n- Material 1 from knowledge base:\n\
+            {{#context#}}\n- Material 2 from internet\n{{#1728722884027.output#}}\n\
+            ---\n<userInput>\nI want to achieve this on my linux:\n{{#sys.query#}}\n\
+            </userInput>"
+        selected: true
+        title: 生成回答
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 97
+      id: '1728722943437'
+      position:
+        x: 1246
+        y: 253
+      positionAbsolute:
+        x: 1246
+        y: 253
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1728722943437.text#}}'
+        desc: ''
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 106
+      id: '1728724079958'
+      position:
+        x: 1550
+        y: 253
+      positionAbsolute:
+        x: 1550
+        y: 253
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -33.930208480732176
+      y: 406.0359860595354
+      zoom: 0.5484124898473124
