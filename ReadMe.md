@@ -1,12 +1,12 @@
 # 🌟 shell_gpt Lite
 
 ## 📖 项目介绍
-
+> DongHua University的小朋友们已经学习完了linux课程,老师们希望他们制作一个简易的shell_gpt来帮助新学linux的小朋友们更好的学习linux命令和语法
 > 这是一个简易版的 shell_gpt，参考 [shell_gpt](https://github.com/TheR1D/shell_gpt) 实现。当前实现了如下几个功能：
 > - 💬 `--chat` 普通聊天，没有记忆
 > - 📚 `--repl` 记忆聊天，会把之前的对话储存在 JSON 中
 > - 🐚 `--shell` 可以生成针对不同平台的 shell 脚本，并提示执行
-> - 🔄 `dify --workflow --conversion` 和配置文件中的 dify 进行交互
+> - 🔄 `dify --workflow --conversion --tool ` 和配置文件中的 dify 进行交互,可以在结束时候调用工具
 
 # 更新日志 😁
 
