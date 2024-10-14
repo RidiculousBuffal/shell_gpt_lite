@@ -1,13 +1,18 @@
 import argparse
 import os
-from chat.chat import NormalChat
+
 import dotenv
+
+from chat.chat import NormalChat
 from chat.chat import create_store, repl_chat
-from utils.JsonUtils import append_json_file
 from chat.chat import shell_chat, default_assistant_stream_out
-from utils.excuteCommand import execute_command_with_prompt
-from utils.platformUtils import get_os_type
 from dify.chat import chatWithDify
+from models.OpenAIClient import LLM
+from utils.JsonUtils import append_json_file
+from utils.dhuCommandXMLparser import parseXML
+from utils.excuteCommand import execute_command_with_prompt
+from utils.excuteCommand import generateShellBash
+from utils.platformUtils import get_os_type
 from utils.printCenter import printByRole
 
 dotenv.load_dotenv()
@@ -18,8 +23,10 @@ def main():
     group = parser.add_mutually_exclusive_group(required=False)
     # 为解析器添加参数
     group.add_argument("-c", "--chat", help="chat sentence")
-    group.add_argument("-repl", "--repl", help="chat with memory")
+    group.add_argument("-r", "--repl", help="chat with memory")
     group.add_argument("-s", "--shell", help="chat with shell command")
+    group.add_argument("-b", "--bash", help="write a bash script with cot")
+
     # 创建子解析器
     subparsers = parser.add_subparsers(dest="command")
 
@@ -32,12 +39,12 @@ def main():
     if args.command == "dify":
         # 指定工作流没有指定对话
         if not args.workflow or not args.conversion:
-            printByRole('error','Please specify both --workflow and --conversion')
+            printByRole('error', 'Please specify both --workflow and --conversion')
         else:
             cnt = 0
             while True:
-                chatWithDify(args.workflow, args.conversion,cnt)
-                cnt = cnt +1
+                chatWithDify(args.workflow, args.conversion, cnt)
+                cnt = cnt + 1
 
 
     elif args.chat:
@@ -60,9 +67,14 @@ def main():
             append_json_file(file_path, 'assistant', str_, p=False)
     elif args.shell:
         os_type = get_os_type()
-        stream = shell_chat(args.shell, os.getenv("DEFAULT_MODEL"), os_type=os_type)
+        stream = shell_chat(args.shell, os.getenv("DEFAULT_MODEL"), os_type=os_type, prompt=LLM.DEFAULT_SHELL_PROMPT)
         str_ = default_assistant_stream_out(stream)
         execute_command_with_prompt(str_)
+    elif args.bash:
+        os_type = get_os_type()
+        result = shell_chat(args.bash, os.getenv("DEFAULT_MODEL"), os_type=os_type, prompt=LLM.DEFAULT_SHELL_PROMPT_V2,
+                            stream=False)
+        generateShellBash(parseXML(result))
     else:
         pass
 

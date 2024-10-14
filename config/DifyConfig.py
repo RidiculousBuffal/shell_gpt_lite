@@ -61,13 +61,13 @@ class DifyConfig:
         except KeyError as e:
             raise KeyError(f"{str(e)} not found in the configuration.")
     @classmethod
-    def return_chat_request_components(cls,endpoint,appName,conversionName,query):
+    def return_chat_request_components(cls,endpoint,appName,conversionName,query,response_mode="streaming"):
         url,user = cls.get_api_base_url_and_user()
         headers = {'Authorization': f'Bearer {cls.get_API_KEY(appName)}','Content-Type': 'application/json'}
         payload = {
             "user" : user,
             "query": query,
-            "response_mode":"streaming",
+            "response_mode":response_mode,
             "inputs":{}
         }
         if cls.getConversionID(appName,conversionName):
