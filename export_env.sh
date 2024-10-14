@@ -69,6 +69,7 @@ export DEFAULT_PROMPT
 export DEFAULT_MODEL
 export DEFAULT_STORE_PATH
 export DIFY_CONFIG_PATH
-
+export all_proxy=''
+export ALL_PROXY=''
 echo "环境变量已导出。"
 
